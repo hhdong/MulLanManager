@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="js/JQuery-zTree-v3.5.15/css/zTreeStyle/zTreeStyle.css">
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+    <meta charset="UTF-8">
+    <title>登录</title>
+</head>
+<body>
+<script type="text/javascript" >
+    function onLogin() {
+        var uid=$("#txtUser").val();
+        var pwd=$("#txtPwd").val();
+        var httpHost ="http://"+location.host;
+        $.post(httpHost+"/login",{uid:uid,pwd:pwd},function (data) {
+            if(data.code=="200")
+            {
+                localStorage.setItem("mul_id",data.user.id)
+                localStorage.setItem("mul_name",data.user.name)
+                self.location.href="/workspace";
+            }
+        });
+    }
+</script>
+<div id="dlg" class="easyui-dialog" title="登录" style="width:250px;height:150px;padding:10px"
+     minimizable="false" maximizable="false" closeable="false"
+     data-options="
+                inline:true,
+                top:100,
+				buttons: [{
+					text:'登录',
+					iconCls:'icon-ok',
+					handler:onLogin
+				}]
+			">
+    <table cellpadding=3>
+        <tr>
+            <td>userId</td>
+            <td><input id="txtUser" class="txt01" /></td>
+        </tr>
+        <tr>
+            <td>password</td>
+            <td><input id="txtPwd"  type="password" class="txt02" /></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

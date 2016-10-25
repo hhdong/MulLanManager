@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>export</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="js/JQuery-zTree-v3.5.15/css/zTreeStyle/zTreeStyle.css">
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+</head>
+<body>
+<a id="btn1" href="" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="exportEn()">导出En的lua文件</a>
+<a id="btn2" href="" class="easyui-linkbutton" data-options="iconCls:'icon-search'" onclick="exportCh()">导出Ch的lua文件</a>
+</body>
+
+<script type="text/javascript">
+
+    function download(data,filename,format){
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([data], {type:"text/plain"}));
+
+
+        a.download = filename + '.' + format;
+        a.click();
+        a.remove();
+    }
+
+    function exportCh(){
+        var httpHost ="http://"+location.host;
+        $.post(httpHost+"/getlanfile",{type:"ch"},function (data) {
+            if(data.code=="200")
+            {
+                console.log(data.str)
+                //alert("ok");
+                download(data.str,"zh","lua");
+            }
+
+        });
+    };
+    function exportEn(){
+        var httpHost ="http://"+location.host;
+        $.post(httpHost+"/getlanfile",{type:"en"},function (data) {
+            if(data.code=="200")
+            {
+                console.log(data.str)
+                //alert("ok");
+                download(data.str,"en","lua");
+            }
+
+        });
+    };
+</script>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>导入数据</title>
+    <link rel="stylesheet" type="text/css" href="css/default.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/gray/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/icon.css" />
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+    <script src="js/csvconvert/CSVParser.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/csvconvert/DataGridRenderer.js" type="text/javascript" charset="utf-8"></script>
+
+    <script type="text/javascript" src="js/import.js"> </script>
+</head>
+
+</body>
+<input type="file" id="upload" onchange="handlechange(this.files)"/>
+
+
+<div id="tb" style="height:auto">
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="confirm()">Confirm</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" onclick="removeit()">Remove</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editit()">Edit</a>
+</div>
+<div id="dg"></div>
+
+<script type="text/javascript">
+
+
+</script>
+<div id="dlg" class="easyui-dialog" title="修改" style="width:400px;height:200px;padding:10px"
+     data-options="
+				buttons: [{
+					text:'Ok',
+					iconCls:'icon-ok',
+					handler:onCancle
+				},{
+					text:'Cancel',
+					iconCls:'icon-cancle',
+					handler:addLanRes
+				}]
+			">
+    <table cellpadding=3>
+        <tr>
+            <td>key</td>
+            <td><input id="txtKey" class="txt01" /></td>
+        </tr>
+        <tr>
+            <td>en</td>
+            <td><input id="txtEn"  class="txt02" /></td>
+        </tr>
+        <tr>
+            <td>ch</td>
+            <td><input id="txtCh"  class="txt03" /></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
