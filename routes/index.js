@@ -42,10 +42,12 @@ router.post("/login",function (req,res,next) {
     if (!err &&(pwd==user.password)) {
       req.session.user = user;
       res.send({code:200,user:{uid:user.id,name:user.name}});
+        console.log("ok");
     } else
     {
         req.session.user = null;
         res.send({code:501,user:{}});
+        console.log("not ok"+err);
     }
    });
 })
