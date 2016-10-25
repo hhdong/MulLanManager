@@ -4,11 +4,94 @@
     <meta charset="UTF-8">
     <title>数据修改</title>
     <link rel="stylesheet" type="text/css" href="css/default.css">
-    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/gray/easyui.css">
-    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.3.5/themes/icon.css" />
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.5.0/themes/gray/easyui.css">
+    <link rel="stylesheet" type="text/css" href="js/jquery-easyui-1.5.0/themes/icon.css" />
     <link rel="stylesheet" type="text/css" href="js/JQuery-zTree-v3.5.15/css/zTreeStyle/zTreeStyle.css">
-    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="js/jquery-easyui-1.3.5/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.5.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery-easyui-1.5.0/jquery.easyui.min.js"></script>
+
+
+    <script type="text/javascript">
+        var editIndex = undefined;
+        function doSearch(){
+            $('#dg').datagrid('load',{
+                key: $('#keyid').val()
+            });
+        }
+        function endEditing(){
+            if (editIndex == undefined){return true}
+            if ($('#dg').datagrid('validateRow', editIndex)){
+                $('#dg').datagrid('endEdit', editIndex);
+                editIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function editit()
+        {
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                var data=row;
+                document.getElementById("txtKey").value=data.key;
+                document.getElementById("txtEn").value=data.en;
+                document.getElementById("txtCh").value=data.ch;
+                $('#dlg').dialog('open')
+            }
+        }
+        function onClickCell(index, field){
+            setTimeout(function(){
+                $('#dg').datagrid('selectRow', index);
+            },0);
+        }
+
+        function append(){
+            $('#dlg').dialog('open')
+        }
+        function removeit(){
+            var row = $('#dg').datagrid('getSelected');
+            if (row){
+                var httpHost ="http://"+location.host;
+                console.log(httpHost);
+                var data=new Object();
+                var key=row.key || "";
+                $.post(httpHost+"/removelanresbykey",{key:key},function (data) {
+                    if(data.code=="200")
+                    {
+                        //alert("ok");
+                    }
+                    $('#dg').datagrid('reload');
+                });
+            }
+        }
+
+        function addLanRes()
+        {
+            $('#dlg').dialog('close')
+            var httpHost ="http://"+location.host;
+            console.log(httpHost);
+            var data=new Object();
+            data.key=document.getElementById("txtKey").value || "";
+            data.ch=document.getElementById("txtCh").value || "";
+            data.en=document.getElementById("txtEn").value || "";
+            $.post(httpHost+"/updatelanbykey",{data:data},function (data) {
+                if(data.code=="200")
+                {
+                    // alert("ok");
+                }
+                $('#dg').datagrid('reload');
+            });
+        }
+        function onCancle()
+        {
+            $('#dlg').dialog('close')
+        }
+        $(function(){
+
+            $('#dlg').dialog('close')
+        })
+
+    </script>
 
 <body>
 <h2>Basic DataGrid</h2>
@@ -38,7 +121,7 @@
 						}">ch</th>
         <span>key:</span>
         <input id="keyid" style="line-height:15px;border:1px solid #ccc">
-        <a href="" class="easyui-linkbutton" data-options="iconCls:'icon-search'" plain="true" onclick="doSearch()">Search</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-search'" plain="true" onclick="doSearch()">Search</a>
     </tr>
     </thead>
 </table>
@@ -49,92 +132,9 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true" onclick="editit()">Edit</a>
 </div>
 
-<script type="text/javascript">
-    var editIndex = undefined;
-    function doSearch(){
-        $('#tt').datagrid('load',{
-            key: $('#keyid').val()
-        });
-    }
-    function endEditing(){
-        if (editIndex == undefined){return true}
-        if ($('#dg').datagrid('validateRow', editIndex)){
-            $('#dg').datagrid('endEdit', editIndex);
-            editIndex = undefined;
-            return true;
-        } else {
-            return false;
-        }
-    }
-    function editit()
-    {
-        var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var data=row;
-            document.getElementById("txtKey").value=data.key;
-            document.getElementById("txtEn").value=data.en;
-            document.getElementById("txtCh").value=data.ch;
-            $('#dlg').dialog('open')
-        }
-    }
-    function onClickCell(index, field){
-        setTimeout(function(){
-            $('#dg').datagrid('selectRow', index);
-        },0);
-    }
 
-    function append(){
-        $('#dlg').dialog('open')
-    }
-    function removeit(){
-        var row = $('#dg').datagrid('getSelected');
-        if (row){
-            var httpHost ="http://"+location.host;
-            console.log(httpHost);
-            var data=new Object();
-            var key=row.key || "";
-            $.post(httpHost+"/removelanresbykey",{key:key},function (data) {
-                if(data.code=="200")
-                {
-                    //alert("ok");
-                }
-                $('#dg').datagrid('reload');
-            });
-        }
-    }
-
-    function addLanRes()
-    {
-        $('#dlg').dialog('close')
-        var httpHost ="http://"+location.host;
-        console.log(httpHost);
-        var data=new Object();
-        data.key=document.getElementById("txtKey").value || "";
-        data.ch=document.getElementById("txtCh").value || "";
-        data.en=document.getElementById("txtEn").value || "";
-        $.post(httpHost+"/updatelanbykey",{data:data},function (data) {
-            if(data.code=="200")
-            {
-               // alert("ok");
-            }
-            $('#dg').datagrid('reload');
-        });
-    }
-    function onCancle()
-    {
-        $('#dlg').dialog('close')
-    }
-    $(function(){
-
-        $('#dlg').dialog('close')
-    })
-
-</script>
 
 <div style="margin:20px 0;"></div>
-<script type="text/javascript">
-    // self.location.href="/workspace";
-</script>
 
 <div id="dlg" class="easyui-dialog" title="修改" style="width:400px;height:200px;padding:10px"
      data-options="

@@ -53,18 +53,33 @@ router.post("/login",function (req,res,next) {
 })
 
 router.post("/getallan",function (req,res,next) {
-  var languages=lanRes.getAllLanRes(function (err,lans) {
-    if(err ||! lans)
+    if(req.body.key)
     {
-      res.send([]);
-      return
+        lanRes.getLanResByMatchKey(req.body.key,function (err,lans) {
+            if(err ||! lans)
+            {
+                res.send([]);
+                return
+            }
+            var msg=req.body;var page= parseInt(msg.page);
+            var rows=parseInt(msg.rows);
+            res.send( {total:lans.length, rows:lans});
+        })
+    }else
+    {
+       lanRes.getAllLanRes(function (err,lans) {
+            if(err ||! lans)
+            {
+                res.send([]);
+                return
+            }
+            var msg=req.body;var page= parseInt(msg.page);
+            var rows=parseInt(msg.rows);
+            res.send( {total:lans.length, rows: lans.slice(rows*(page-1),rows*page-1)});
+        })
     }
-    var msg=req.body;
-      var page= parseInt(msg.page);
-      var rows=parseInt(msg.rows);
 
-    res.send( {total:lans.length, rows: lans.slice(rows*(page-1),rows*page-1)});
-  })
+
 })
 
 router.post("/removelanresbykey",function (req,res,next) {
